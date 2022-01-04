@@ -1,6 +1,6 @@
 # provider_ecommerce
 
-A new Flutter project.
+A Flutter Ecommerce using Provider state management.
 
 ## Getting Started
 
