@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:collection/collection.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -26,7 +29,8 @@ class _SelectOptionBoxState extends State<SelectOptionBox> {
   final starHour = 0;
   final currentHour = DateTime.now().hour;
   final currentMinute = DateTime.now().minute;
-  List<int> _todayHours = [], _tomorowHours = [], _minutes = [], _hours = [];
+  List<int> _todayHours = [], _tomorowHours = [], _hours = [];
+  var _minutes = SortedList<int>((a, b) => a.compareTo(b));
   int hourValue = DateTime.now().hour;
   int minutesValue = 0;
   String dateType = DateType.today.name;
@@ -169,3 +173,32 @@ class _SelectOptionBoxState extends State<SelectOptionBox> {
 }
 
 enum DateType { today, tomorow }
+
+class SortedList<E> extends DelegatingList<E> {
+  int Function(E a, E b)? _compareFunction;
+
+  List<E> get _listBase => super.toList();
+
+  SortedList([int Function(E a, E b)? compareFunction]) : super(<E>[]) {
+    this._compareFunction = compareFunction;
+  }
+
+  @override
+  void add(E value) {
+    super.add(value);
+    sort(_compareFunction);
+  }
+
+  @override
+  void addAll(Iterable<E> iterable) {
+    super.addAll(iterable);
+    sort(_compareFunction);
+  }
+
+  @override
+  List<E> operator +(List<E> other) {
+    var returnList = (_listBase + (other));
+    returnList.sort(_compareFunction);
+    return returnList;
+  }
+}
